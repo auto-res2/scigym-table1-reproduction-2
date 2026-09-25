@@ -82,8 +82,8 @@ wheels = [
 
 [[package]]
 name = "airas-eval"
-version = "0.12.1"
-source = { git = "https://github.com/airas-org/airas-eval?tag=v0.12.1#494c3c84ae004bf765ca6dde3833016179dec03d" }
+version = "0.12.2"
+source = { git = "https://github.com/airas-org/airas-eval?tag=v0.12.2#08bff6d9aebe6197939faf16a9496f93aacba0bc" }
 dependencies = [
     { name = "numpy" },
     { name = "pydantic" },
@@ -507,7 +507,7 @@ eval = [
 requires-dist = [{ name = "pyyaml", specifier = "==6.0.2" }]
 
 [package.metadata.requires-dev]
-eval = [{ name = "airas-eval", extras = ["scigym"], git = "https://github.com/airas-org/airas-eval?tag=v0.12.1" }]
+eval = [{ name = "airas-eval", extras = ["scigym"], git = "https://github.com/airas-org/airas-eval?tag=v0.12.2" }]
 
 [[package]]
 name = "filelock"
