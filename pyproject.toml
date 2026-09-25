@@ -1,23 +1,28 @@
-# Please list the required python packages in `dependencies` below.
-# Keep this file limited to dependencies (hydra-core, wandb, plus
-# task-specific libraries).
-
 [project]
 name = "experiment"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.12"
 dependencies = [
-    "hydra-core",
-    "wandb",
+    "pygraphviz==2.0.2rc1",  # 評価器の SBML 図で必要。aarch64 wheel があるのは 2.0 系
+    "pyyaml==6.0.2",
+    "scigym",
+    "scikit-learn==1.7.2",
 ]
 
-# `src/` is run with `uv run python -m src.main` from the repository root,
-# never installed as a distribution, so this project is not a package.
 [tool.uv]
 package = false
+prerelease = "allow"  # pygraphviz の aarch64 wheel は 2.0 のリリース候補にしか無い
+# aarch64 に wheel が無い固定版だけ差し替える（RIKYU の scigym_improvement と同じ）
+override-dependencies = [
+    "antimony==2.14.0",
+    "libroadrunner==2.7.0",
+]
+# python-libnuml / python-libcombine は aarch64 wheel が無く sdist の C++ ビルドが落ちる。
+# tellurium は libnuml を使わず、libcombine は import 時に参照するだけなので Dockerfile でスタブを置く
+exclude-dependencies = ["rrplugins", "phrasedml", "python-libnuml", "python-libcombine"]
 
-# Evaluation layer (managed by AIRAS). Pinned so the reported metrics are
-# reproducible; experiment code must NOT import airas_eval — it is invoked only
-# through `make evaluate` / the airas-eval CLI on the eval_inputs files.
+[tool.uv.sources]
+scigym = { git = "https://github.com/h4duan/SciGym", rev = "88a7b93609e35b6ecb4eb343d816d6ff09256c6a" }
+
 [dependency-groups]
-eval = ["airas-eval==0.11.0"]
+eval = ["airas-eval==0.11.1"]
