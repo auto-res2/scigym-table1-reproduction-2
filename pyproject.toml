@@ -3,26 +3,25 @@ name = "experiment"
 version = "0.1.0"
 requires-python = ">=3.11,<3.12"
 dependencies = [
-    "pygraphviz==2.0.2rc1",  # 評価器の SBML 図で必要。aarch64 wheel があるのは 2.0 系
     "pyyaml==6.0.2",
-    "scigym",
-    "scikit-learn==1.7.2",
 ]
 
+# `src/` is run with `uv run python -m src.main` from the repository root,
+# never installed as a distribution, so this project is not a package.
 [tool.uv]
 package = false
-prerelease = "allow"  # pygraphviz の aarch64 wheel は 2.0 のリリース候補にしか無い
+# 実験コードは公式 Controller を使うので、評価層の scigym extra に入る SciGym をそのまま使う
+default-groups = ["eval"]
 # aarch64 に wheel が無い固定版だけ差し替える（RIKYU の scigym_improvement と同じ）
-override-dependencies = [
-    "antimony==2.14.0",
-    "libroadrunner==2.7.0",
-]
-# python-libnuml / python-libcombine は aarch64 wheel が無く sdist の C++ ビルドが落ちる。
-# tellurium は libnuml を使わず、libcombine は import 時に参照するだけなので Dockerfile でスタブを置く
+prerelease = "allow"
+override-dependencies = ["antimony==2.14.0", "libroadrunner==2.7.0"]
+# python-libnuml / python-libcombine は aarch64 の sdist ビルドが落ちる。tellurium は libnuml を使わず、
+# libcombine は import 時に参照するだけなので Dockerfile でスタブを置く
 exclude-dependencies = ["rrplugins", "phrasedml", "python-libnuml", "python-libcombine"]
 
-[tool.uv.sources]
-scigym = { git = "https://github.com/h4duan/SciGym", rev = "88a7b93609e35b6ecb4eb343d816d6ff09256c6a" }
-
+# 評価層。ベンチマークパック scigym_small は SciGym（コミット固定）と pygraphviz を extra で持つ
 [dependency-groups]
-eval = ["airas-eval==0.11.1"]
+eval = ["airas-eval[scigym]"]
+
+[tool.uv.sources]
+airas-eval = { git = "https://github.com/airas-org/airas-eval", tag = "v0.12.1" }
