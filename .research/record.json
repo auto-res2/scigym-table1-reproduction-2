@@ -262,6 +262,17 @@
               "model": "gpt-4.1",
               "supported": false,
               "reason": "The citing text claims that the official Evaluator with commit 88a7b93 is used, and that this is referenced in s3.p1, but the quoted passage only defines a SCIGYM_COMMIT for SciGym (not an Evaluator commit) so the source does not support the citing text's claim about the Evaluator's version."
+            },
+            {
+              "text_sha256": "fa4e918fb9a01876bd54861978ddbe9e5918ca0244f5f1060279fa329f09e121",
+              "model": "gpt-4.1",
+              "supported": true
+            },
+            {
+              "text_sha256": "1469c5020f065fce0a90bbd056d7d3e58aab34006bf7735964c50f63468d46fe",
+              "model": "gpt-4.1",
+              "supported": true,
+              "reason": "The citing text accurately refers to the fixing of the SciGym package to commit 88a7b93, which is directly stated in the quoted passage."
             }
           ]
         }
