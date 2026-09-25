@@ -1,0 +1,104 @@
+\PassOptionsToPackage{numbers}{natbib}
+\documentclass{article}
+\usepackage{iclr2024_conference}
+\usepackage{luatexja-fontspec}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\graphicspath{{../}}
+
+\InputIfFileExists{values.tex}{}{}
+\providecommand{\airasval}[1]{\textbf{??airasval:\detokenize{#1}??}}
+\providecommand{\unverified}[1]{#1}
+\providecommand{\airasrecordlink}[1]{#1}
+
+\title{SciGym Table 1 の事前登録再現（第 2 版）: 現行 API の Gemini 2.5 と GPT-4.1 を公式評価器のベンチマークパックで採点する}
+\author{AIRAS}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+SciGym \citep{duan-2025-measuring} は、反応をすべて取り除いた SBML モデルを LLM エージェントに渡し、摂動実験とコード実行を繰り返して反応機構を復元させるベンチマークである。論文の Table 1 は 6 つのフロンティアモデルを SciGym-small 137 件で各 1 回走らせた平均値を報告しているが、実行間の分散も、別環境・別時点での再現性も示していない。本研究は、公開コードの Controller をそのまま用い、現在 API で提供されている Gemini-2.5-Pro、Gemini-2.5-Flash、GPT-4.1、GPT-4.1-mini の 4 モデルで Table 1 の対応する 4 行を再現する。採点は評価層 airas-eval の SciGym ベンチマークパック \citep{airasorg-2026-airas} が行う。パックは SciGym 公式の Evaluator をコミット固定で呼び、137 件のデータを sha256 で固定し、論文の 3 指標（STE、RMS、NTS）を返す。実験前に、各モデルの平均 Simulation Trajectory Error（STE）が論文値を 0.05 より大きくは上回らないことを反証線として登録し、予測区間を $\pm 0.05$ と宣言する。Reaction Matching Score（RMS、modifier あり / なし）と Network Topology Score（NTS）は同じ実行から表として報告する。本研究は同じ設計の第 1 版（Gemini-2.5-Pro の実行途中で API 予算を超過し 25 件が失敗したまま確定した）のやり直しである。実行は RIKYU（aarch64）上で行い、論文設定からの逸脱（Gemini の GA 版、libroadrunner 2.7.0、応答トークン上限）はすべて実験前に宣言する。
+\end{abstract}
+
+\section{はじめに}
+\label{sec:intro}
+LLM に科学的発見のサイクル全体（実験の設計、結果の解析、機構の提案）を行わせて測るベンチマークとして、SciGym \citep{duan-2025-measuring} が提案された。BioModels 由来の SBML モデルから反応をすべて取り除いたものをエージェントに渡し、エージェントは初期濃度を変えた摂動実験を要求し、返ってきた時系列を Python で解析し、最終的な SBML を提出する。提出モデルは真のモデルと、軌道誤差（STE）と反応の一致度（RMS）で比較される。
+
+論文の主結果である Table 1 は、3 社の pro / mini 計 6 モデルを SciGym-small の 137 件で評価した平均値である \cite[s1.p10]{duan-2025-measuring}。この評価は各モデル 1 回の実行であり、temperature 1.0 でサンプリングされる \cite[s2.p1]{h4duan-2025-scigym}。したがって Table 1 の数値がどの程度安定なのか、また同じコードを別の環境と時点で走らせて同じ数値が戻るのかは、論文からは分からない。さらに Gemini の 2 モデルはプレビュー版で評価されており \cite[s1.p1]{duan-2025-measuring}、現在は同じ版を呼び出せない。
+
+本研究はこのギャップに対し、Table 1 のうち Gemini と OpenAI の 4 行を、公開コード \citep{h4duan-2025-scigym} の Controller をそのまま使って再現する。採点は実験コードではなく評価層 airas-eval の \texttt{scigym\_small} パック \citep{airasorg-2026-airas} が行う。パックは公式の Evaluator を含む SciGym パッケージをコミット \texttt{88a7b93} に固定し \cite[s3.p1]{airasorg-2026-airas}、137 件の入力ファイルを公式リリースの sha256 と照合し、STE・RMS・NTS を返す。第 1 版（auto-res2/scigym-table1-reproduction）では指標を実験コードが集計し、Gemini-2.5-Pro の実行途中で API ゲートウェイの予算上限に達して 25 件が失敗したまま確定した。本研究はその設計上の教訓（予算超過は run を止める、1 件ごとの強制タイムアウト、採点は評価層に任せる）を反映したやり直しである。Claude の 2 モデルは本研究が用いる API ゲートウェイで提供されていないため対象外とする。判定は AIRAS の事前登録の枠組みに従い、仮説・判定基準・予測区間・実行条件を実験前に記録へ凍結し、実験後は計測値だけを流し込む。
+
+\section{関連研究}
+\label{sec:related}
+SciGym \citep{duan-2025-measuring} は、単一スキルを測る既存のベンチマークと異なり、エージェントが自ら摂動実験を設計してその結果を受け取る閉ループを評価する。評価指標は 3 つで、種と種の相互作用（同じ組は 1 回だけ数える）の F1（Network Topology Score、NTS）\cite[s1.p11]{duan-2025-measuring}、反応物と生成物の集合が一致した反応の適合率・再現率・F1（RMS。modifier まで要求する厳格版もある）\cite[s1.p8]{duan-2025-measuring}、および全種の時系列の対称平均絶対パーセント誤差（STE）\cite[s1.p9]{duan-2025-measuring} である。本研究は 3 つすべてを公式 Evaluator の実装で計算する。公式 Controller が実行時に書き出すのは STE と RMS だけなので、NTS はパックが Evaluator の関数を追加で呼んで得る。
+
+論文は pro モデルが mini モデルを一貫して上回り \cite[s1.p6]{duan-2025-measuring}、Gemini-Pro が最良であった \cite[s1.p7]{duan-2025-measuring} と報告している。本研究はこれらの順序関係についても、判定基準には含めないが、得られた表から読み取って報告する。
+
+\section{仮説と予測}
+\label{sec:hypothesis}
+以下は記録（record.json）から生成された仮説・主張・判定基準・予測区間の一覧である。実験後は Observed と Verdict が計測値から埋められる。
+
+\input{claims.tex}
+
+\paragraph{判定基準と予測区間の根拠.}
+各主張の反証線は「（再現の平均 STE）$-$（論文値）$\le 0.05$」である。0.05 は、論文 Table 1 で隣り合うモデルの最小差（Gemini-2.5-Pro の \unverified{0.3212} と Claude-3.7-Sonnet の \unverified{0.3615} の差 \unverified{0.04}）とほぼ同じで、これより大きく外れると Table 1 の順位付けの粒度で再現に失敗したことになる。1 件の STE は $[0, 1]$ の値をとり、標準偏差を 0.25 程度と見積もると 137 件平均の標準誤差は約 0.02、2 つの 1 回実行の差の標準誤差は約 0.03 である。予測区間は $\pm 0.05$ とする。基準は悪化方向の片側なので、現行版のモデルが論文より良い結果を出しても主張は成立するが、予測区間を下に外れた場合はそのとおり報告する。
+
+RMS の適合率・再現率・F1 も同じ実行から表として報告し、各モデルの F1 が論文値 $\pm 0.06$ に入ることを予測する（第 1 版での差は $-0.054$ から $+0.047$ であった）が、1 つの主張に置ける判定基準は 1 つであるため、判定には用いない。NTS は論文が Table 1 に載せていないため比較値が無く、表として報告するのみで予測も置かない。
+
+\section{方法}
+\label{sec:method}
+\paragraph{タスク.}
+各インスタンスは真の SBML（\texttt{truth.xml}）、反応を取り除いた不完全な SBML（\texttt{partial.xml}）、シミュレーション条件（\texttt{truth.sedml}）からなる。エージェントは不完全な SBML を受け取り、各ターンで実験（初期濃度の変更を指定し、真のモデルの時系列を得る）、コード実行（numpy / pandas / scipy / libsbml と、仮説モデルを走らせる \texttt{simulate} 関数が使える）、提出のいずれかを markdown 形式で返す。提出は任意の時点で行え、反復数の上限は 20 である \cite[s1.p3]{duan-2025-measuring}。提出した SBML が無効な場合は追加のデバッグ反復が許され、それでも無効なら不完全 SBML のまま採点される \cite[s1.p4]{duan-2025-measuring}。
+
+\paragraph{実行系.}
+ループ、プロンプト、実験の実行は公開コード \citep{h4duan-2025-scigym} の \texttt{Controller} をそのまま用いる。本研究が書くのは、(1) OpenAI 互換 API でモデルを呼ぶ \texttt{LLM} 実装（公式の GPT 実装と同じく、システムプロンプトと全履歴を毎回送る）、(2) インスタンスごとに 1 プロセスで Controller を起動し、137 件を並列に走らせる駆動部、(3) 各インスタンスの入力ファイルと提出 SBML を評価層の入力にまとめる部分だけである。公式コードでは 5 つの履歴がクラス属性として定義されており 1 プロセスで複数件を走らせると履歴が持ち越されるが、1 件 1 プロセスとすることでこの問題を避ける。
+
+\paragraph{指標.}
+実験コードは各インスタンスについて公式の 3 ファイル（\texttt{truth.xml}、\texttt{partial.xml}、\texttt{truth.sedml}）と提出 SBML を 1 つの入力ファイルに書くだけで、指標は計算しない。airas-eval 0.11.1 の \texttt{scigym\_small} パック \citep{airasorg-2026-airas} が、入力ファイルの内容を公式リリースの sha256 と照合したうえで、コミット \texttt{88a7b93} に固定した SciGym パッケージ \cite[s3.p1]{airasorg-2026-airas} の公式 Evaluator を呼んでシミュレーションと採点を行い、137 件の単純平均として次を返す: STE（\texttt{trajectory\_smape}）、RMS の適合率・再現率・F1（modifier なし \texttt{reaction\_*}、modifier あり \texttt{reaction\_*\_with\_modifiers}）、NTS の適合率・再現率・F1（\texttt{topology\_*}）とエッジ型別の F1。提出 SBML が無い、または無効な件は、公式 Controller と同じく不完全 SBML の採点値で平均に含める。各 run の \texttt{metrics.json} はこのレポートの指標と入力サイズ（\texttt{n\_instances}、\texttt{n\_valid\_submissions}）に、実験側が数えたトークン数を添えたものである。
+
+\section{実験設計}
+\label{sec:design}
+\paragraph{モデル.}
+論文の 6 モデルのうち、Gemini-2.5-Pro-Preview-03-25、Gemini-2.5-Flash-Preview-04-17、GPT-4.1-2025-04-14、GPT-4.1-Mini-2025-04-14 \cite[s1.p1]{duan-2025-measuring} に対応する現行モデルとして、Vercel AI Gateway の OpenAI 互換エンドポイント経由で \texttt{google/gemini-2.5-pro}、\texttt{google/gemini-2.5-flash}、\texttt{openai/gpt-4.1}、\texttt{openai/gpt-4.1-mini} を用いる。GPT-4.1 の 2 つは論文と同じ 2025-04-14 スナップショットである。Gemini の 2 つはプレビュー版が提供終了しているため GA 版を用いる。これが本研究の再現条件の最大の違いであり、事前に宣言する。
+
+\paragraph{データ.}
+SciGym-small の 137 件 \cite[s1.p2]{duan-2025-measuring}（Hugging Face \texttt{h4duan/scigym-sbml} の small split）を用いる。
+
+\paragraph{設定.}
+\texttt{max\_iterations} は論文どおり 20（公開 config の既定値 5 \cite[s2.p2]{h4duan-2025-scigym} は動作確認用）、\texttt{eval\_debug\_rounds} は論文本文の 3 \cite[s1.p4]{duan-2025-measuring}（公開 config の既定値は 5 \cite[s2.p3]{h4duan-2025-scigym}）、\texttt{temperature} は公開 config の 1.0 \cite[s2.p1]{h4duan-2025-scigym}、摂動は初期濃度の変更のみとする。応答のトークン上限は 32768 とする。公式の GPT 実装の既定値 8192 では、思考トークンを出すモデルが本文を返せずに失敗しうるためである。各モデル、各インスタンスを 1 回ずつ実行する。1 件 1 試行に 90 分の強制タイムアウトを設け、API エラーで終わらなかった件は最大 3 試行まで最初からやり直し、3 試行とも終わらなければ提出無しとして評価層に渡す。API ゲートウェイの予算超過（HTTP 402）を検知した場合は run 全体を失敗として止め、部分的な結果は取り込まない。
+
+\paragraph{計算資源と環境.}
+実行は Seyval を通じて RIKYU（Slurm、GB200 ノード、aarch64）で行う。GPU は使わないが、資源の単位が GPU であるため 1 GPU を要求する。環境は Dockerfile と \texttt{uv.lock} で固定する。aarch64 向けの wheel が無いため、libroadrunner は公式の 2.8.0 ではなく 2.7.0、antimony は 2.14.0 を用い、rrplugins と phrasedml は除外する。この差でシミュレーション結果がわずかに変わる可能性があり、仮説の前提として記録する。137 件は 1 件 1 プロセスで並列に実行する。
+
+\paragraph{段階.}
+sanity は 1 件（BIOMD0000000027）を 2 反復で走らせて配管を確かめる。pilot は sorted した 137 件から 14 件おきに選んだ 10 件を 20 反復で走らせ、1 件あたりの所要時間と API コストを測って全件実行の可否を判断する。主張の判定は full（137 件）の結果だけで行い、sanity と pilot の結果は記録に取り込まない。
+
+\paragraph{run と主張の対応.}
+\texttt{gemini-2.5-pro} $\to$ C1、\texttt{gemini-2.5-flash} $\to$ C2、\texttt{gpt-4.1} $\to$ C3、\texttt{gpt-4.1-mini} $\to$ C4。判定に使う指標は \texttt{trajectory\_smape} である。
+
+% ===== airas: post-experiment sections, filled once runs exist =====
+
+\section{結果}
+\label{sec:results}
+実験は未実施である。実行後にこの節へ、各 run の STE と RMS を \texttt{table1}、NTS を \texttt{topology}、完走件数とトークン消費を \texttt{runs} として、また各主張の判定基準に対する計測値を記入する。
+
+\section{考察}
+\label{sec:discussion}
+実験は未実施である。
+
+\section{結論}
+\label{sec:conclusion}
+実験は未実施である。
+
+\section*{データの利用可能性}
+記録は \airasrecordlink{record.json} にある。実験コード、環境の固定（Dockerfile と \texttt{uv.lock}）、各 run の結果と provenance は同じリポジトリに含まれる。
+
+\bibliographystyle{iclr2024_conference}
+\bibliography{references}
+
+\end{document}
