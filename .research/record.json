@@ -1,1 +1,544 @@
-{}
+{
+  "literature": [
+    {
+      "id": "s1",
+      "title": "Measuring Scientific Capabilities of Language Models with a Systems Biology Dry Lab",
+      "authors": [
+        "Haonan Duan",
+        "Stephen Zhewen Lu",
+        "Caitlin Fiona Harrigan",
+        "Nishkrit Desai",
+        "Jiarui Lu",
+        "Michał Koziarski",
+        "Leonardo Cotta",
+        "Chris J. Maddison"
+      ],
+      "year": 2025,
+      "venue": "arXiv preprint arXiv:2507.02083 (NeurIPS 2025 Datasets and Benchmarks Track)",
+      "arxiv_id": "2507.02083",
+      "url": "https://arxiv.org/pdf/2507.02083",
+      "bibkey": "duan-2025-measuring",
+      "verified_by": "arxiv",
+      "verified_at": "2026-09-25T16:40:26+00:00",
+      "fulltext": {
+        "path": ".research/sources/s1/fulltext.txt",
+        "sha256": "da6c8d3dcbbd8c768ee7735346726853026ccc88a9b03d475dc293e347c378fd"
+      },
+      "parser": "pymupdf 1.26.6",
+      "passages": [
+        {
+          "id": "s1.p1",
+          "node_type": "setup",
+          "quote": "We evaluated six models from three frontier model families, each represented by their professional and mini variants: Anthropic’s Claude-3.7-Sonnet-20250219 (P) and Claude-3.5-Haiku-20241022 (M); Google’s Gemini-2.5-Pro-Preview-03-25 (P) and Gemini-2.5-Flash-Preview-04-17 (M); and OpenAI’s GPT-4.1-2025-04-14 (P) and GPT-4.1-Mini-2025-04-14 (M)."
+        },
+        {
+          "id": "s1.p2",
+          "node_type": "setup",
+          "quote": "Due to computational resource constraints, we restricted our evaluation to SCIGYM-small, with a total of 137 tasks."
+        },
+        {
+          "id": "s1.p3",
+          "node_type": "setup",
+          "quote": "The agent may submit its final model and conclude the discovery process at any point, subject to a maximum iteration limit (20 in our benchmark)."
+        },
+        {
+          "id": "s1.p4",
+          "node_type": "setup",
+          "quote": "If the submitted model is invalid or cannot be simulated, we allow for 3 additional debugging iterations before evaluating against the incomplete SBML structure."
+        },
+        {
+          "id": "s1.p5",
+          "node_type": "result",
+          "quote": "Gemini-2.5-Flash 0.4181 0.1527 0.1071 0.1217 0.2399 0.1839 0.2005 GPT-4.1-mini 0.6007 0.1516 0.1253 0.1320 0.2530 0.2313 0.2322 Claude-3.5-Haiku 0.6281 0.0858 0.0421 0.0530 0.1454 0.0805 0.0987 Gemini-2.5-Pro 0.3212 0.2138 0.1664 0.1817 0.3781 0.3219 0.3383 GPT-4.1 0.4611 0.2067 0.1597 0.1740 0.3517 0.2888 0.3038 Claude-3.7-Sonnet 0.3615 0.1780 0.1698 0.1688 0.3160 0.3170 0.3047"
+        },
+        {
+          "id": "s1.p6",
+          "node_type": "claim",
+          "quote": "Our results show that across all model families, pro variants consistently outperform their mini counterparts, with both lower STE errors and higher RMS scores."
+        },
+        {
+          "id": "s1.p7",
+          "node_type": "claim",
+          "quote": "Among all models evaluated, Gemini-Pro achieved the best overall performance."
+        },
+        {
+          "id": "s1.p8",
+          "node_type": "definition",
+          "quote": "We consider two reactions \"matched\" if they have identical sets of reactants and products. In the second, more stringent version, we additionally require matching modifiers."
+        },
+        {
+          "id": "s1.p9",
+          "node_type": "definition",
+          "quote": "We employ the Symmetric Mean Absolute Percentage Error (SMAPE) (Makridakis, 1993), which normalizes errors relative to magnitude."
+        },
+        {
+          "id": "s1.p10",
+          "node_type": "result",
+          "quote": "Table 1: Pro models outperform their mini counterparts in SCIGYM, with Gemini dominating in both size categories. We report the average Simulation Trajectory Error (STE) and Reaction Matching Score (RMS) across all benchmark instances."
+        },
+        {
+          "id": "s1.p11",
+          "node_type": "definition",
+          "quote": "Network Topology Score (NTS). To assess success in recovering the correct system topology, we measure pairwise interactions between all species in the system and calculate F1 score. If identical relationships between the same species appear in multiple reactions, we count them only once."
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "kind": "repository",
+      "title": "h4duan/SciGym",
+      "authors": [
+        "h4duan"
+      ],
+      "year": 2025,
+      "url": "https://github.com/h4duan/SciGym",
+      "commit": "88a7b93609e35b6ecb4eb343d816d6ff09256c6a",
+      "bibkey": "h4duan-2025-scigym",
+      "verified_by": "git",
+      "verified_at": "2026-09-25T16:40:27+00:00",
+      "fulltext": {
+        "path": ".research/sources/s2/fulltext.txt",
+        "sha256": "268fd64875a5956a7094d1ee646584dc8fc56c289ef4142ba93b694524cad209"
+      },
+      "parser": "git show",
+      "passages": [
+        {
+          "id": "s2.p1",
+          "node_type": "setup",
+          "quote": "temperature: 1.0"
+        },
+        {
+          "id": "s2.p2",
+          "node_type": "setup",
+          "quote": "max_iterations: 5"
+        },
+        {
+          "id": "s2.p3",
+          "node_type": "setup",
+          "quote": "eval_debug_rounds: 5"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "kind": "repository",
+      "title": "airas-org/airas-eval",
+      "authors": [
+        "airas-org"
+      ],
+      "year": 2026,
+      "url": "https://github.com/airas-org/airas-eval",
+      "commit": "13875b0a596210ca60f988b0822247f67ccaa30e",
+      "bibkey": "airasorg-2026-airas",
+      "verified_by": "git",
+      "verified_at": "2026-09-25T16:40:28+00:00",
+      "fulltext": {
+        "path": ".research/sources/s3/fulltext.txt",
+        "sha256": "2c86b86404e5f3d14e531aaad893cacf349bc6d3807f33a317712858093d0f6a"
+      },
+      "parser": "git show",
+      "passages": [
+        {
+          "id": "s3.p1",
+          "node_type": "method",
+          "quote": "SCIGYM_COMMIT = \"88a7b93609e35b6ecb4eb343d816d6ff09256c6a\""
+        }
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "h1",
+      "statement": "SciGym 論文の Table 1 のうち Gemini-2.5-Pro、Gemini-2.5-Flash、GPT-4.1、GPT-4.1-mini の 4 行は、公開コードの Controller をそのまま用い、現在 API で提供されている同名モデル（Gemini 2 種は GA 版、GPT-4.1 2 種は論文と同じ 2025-04-14 スナップショット）で SciGym-small 137 件を最大 20 反復で解かせ、提出モデルを airas-eval の scigym_small パック（SciGym 公式 Evaluator）で採点したとき、各モデルの平均 Simulation Trajectory Error（STE）が論文値から 0.05 以内に収まる形で再現される。",
+      "assumptions": [
+        "同名モデルの現行版（Gemini-2.5-Pro / Flash の GA 版、GPT-4.1 / 4.1-mini の 2025-04-14 スナップショット）が、論文で使われた版と同等の能力を持つこと（c1〜c4）",
+        "aarch64 向けの libroadrunner 2.7.0 と antimony 2.14.0 が、論文環境の libroadrunner 2.8.0 と同じ軌道と評価値を与えること（c1〜c4）",
+        "temperature 1.0 での 1 回実行の平均 STE（137 件平均）の実行間変動が 0.05 より十分小さいこと（c1〜c4）",
+        "Vercel AI Gateway の OpenAI 互換エンドポイント経由の各モデルが、各社の公式 API と同じ応答分布を持つこと（c1〜c4）",
+        "平均 STE が Table 1 の再現性を代表すること。RMS（modifier あり / なし）と NTS は同じ実行から表として報告するが、判定基準には用いない（c1〜c4）"
+      ],
+      "grounded_on": [
+        "s1.p1",
+        "s1.p5",
+        "s1.p10"
+      ],
+      "claims": [
+        {
+          "id": "c1",
+          "statement": "現行の Gemini-2.5-Pro（google/gemini-2.5-pro）で SciGym-small 137 件を最大 20 反復で解かせたときの平均 STE は、論文の 0.3212 を 0.05 より大きくは上回らない。",
+          "rationale": "Table 1 で最良とされた行がそのまま再現されることは、論文の主結果が特定のプレビュー版や実行環境に依存していないことの直接の証拠であり、h1 の Gemini-2.5-Pro 行を担う。",
+          "verifier": {
+            "kind": "seyval"
+          },
+          "designs": [
+            {
+              "id": "d1",
+              "summary": "公式 Controller（max_iterations=20、eval_debug_rounds=3、temperature=1.0、摂動は初期濃度変更のみ）で SciGym-small 137 件を 1 件 1 プロセスで解かせ、各件の公式 3 ファイルと提出 SBML を airas-eval の scigym_small に渡して採点する。モデルは Vercel AI Gateway 経由の google/gemini-2.5-pro。",
+              "runs": [
+                {
+                  "run_id": "gemini-2.5-pro",
+                  "description": "google/gemini-2.5-pro で SciGym-small 137 件を 20 反復で実行",
+                  "params": {
+                    "mode": "full"
+                  },
+                  "cites_passages": [
+                    "s1.p1"
+                  ]
+                }
+              ],
+              "cites_passages": [
+                "s1.p3",
+                "s1.p4",
+                "s2.p1",
+                "s3.p1"
+              ]
+            }
+          ],
+          "cites_passages": [
+            "s1.p5",
+            "s1.p10",
+            "s1.p3",
+            "s1.p2",
+            "s1.p7"
+          ],
+          "criterion": {
+            "metric": "trajectory_smape",
+            "subject": "gemini-2.5-pro",
+            "reference": 0.3212,
+            "op": "<=",
+            "margin": 0.05,
+            "reference_passage": "s1.p5"
+          },
+          "prediction": {
+            "low": -0.05,
+            "high": 0.05,
+            "basis": "論文 Table 1 の 1 回実行の平均値。前回の再現（auto-res2/scigym-table1-reproduction）で 1 件の STE の標準偏差は約 0.3、137 件平均の標準誤差は約 0.026 だった。モデル版の差を含めても ±0.05 に収まると予測する"
+          }
+        },
+        {
+          "id": "c2",
+          "statement": "現行の Gemini-2.5-Flash（google/gemini-2.5-flash）で SciGym-small 137 件を最大 20 反復で解かせたときの平均 STE は、論文の 0.4181 を 0.05 より大きくは上回らない。",
+          "rationale": "Gemini 系の mini 変種の行が再現されることで、h1 の Gemini-2.5-Flash 行を担い、c1 と合わせて Gemini 系の pro / mini の関係が論文どおりかを読めるようにする。",
+          "verifier": {
+            "kind": "seyval"
+          },
+          "designs": [
+            {
+              "id": "d2",
+              "summary": "d1 と同じ設定で、モデルを google/gemini-2.5-flash に替える。",
+              "runs": [
+                {
+                  "run_id": "gemini-2.5-flash",
+                  "description": "google/gemini-2.5-flash で SciGym-small 137 件を 20 反復で実行",
+                  "params": {
+                    "mode": "full"
+                  },
+                  "cites_passages": [
+                    "s1.p1"
+                  ]
+                }
+              ],
+              "cites_passages": [
+                "s1.p3",
+                "s1.p4",
+                "s2.p1",
+                "s3.p1"
+              ]
+            }
+          ],
+          "cites_passages": [
+            "s1.p5",
+            "s1.p10",
+            "s1.p3",
+            "s1.p2",
+            "s1.p6"
+          ],
+          "criterion": {
+            "metric": "trajectory_smape",
+            "subject": "gemini-2.5-flash",
+            "reference": 0.4181,
+            "op": "<=",
+            "margin": 0.05,
+            "reference_passage": "s1.p5"
+          },
+          "prediction": {
+            "low": -0.05,
+            "high": 0.05,
+            "basis": "論文 Table 1 の 1 回実行の平均値。前回の再現での差は +0.028 で、137 件平均の標準誤差は約 0.028 だった"
+          }
+        },
+        {
+          "id": "c3",
+          "statement": "GPT-4.1（openai/gpt-4.1、2025-04-14 スナップショット）で SciGym-small 137 件を最大 20 反復で解かせたときの平均 STE は、論文の 0.4611 を 0.05 より大きくは上回らない。",
+          "rationale": "論文と同じ日付スナップショットが使える唯一の pro モデルであり、モデル版の差を含まない最も純粋な再現条件として h1 の GPT-4.1 行を担う。",
+          "verifier": {
+            "kind": "seyval"
+          },
+          "designs": [
+            {
+              "id": "d3",
+              "summary": "d1 と同じ設定で、モデルを openai/gpt-4.1 に替える。",
+              "runs": [
+                {
+                  "run_id": "gpt-4.1",
+                  "description": "openai/gpt-4.1 で SciGym-small 137 件を 20 反復で実行",
+                  "params": {
+                    "mode": "full"
+                  },
+                  "cites_passages": [
+                    "s1.p1"
+                  ]
+                }
+              ],
+              "cites_passages": [
+                "s1.p3",
+                "s1.p4",
+                "s2.p1",
+                "s3.p1"
+              ]
+            }
+          ],
+          "cites_passages": [
+            "s1.p5",
+            "s1.p10",
+            "s1.p3",
+            "s1.p2"
+          ],
+          "criterion": {
+            "metric": "trajectory_smape",
+            "subject": "gpt-4.1",
+            "reference": 0.4611,
+            "op": "<=",
+            "margin": 0.05,
+            "reference_passage": "s1.p5"
+          },
+          "prediction": {
+            "low": -0.05,
+            "high": 0.05,
+            "basis": "論文 Table 1 の 1 回実行の平均値。前回の再現での差は +0.047 で、137 件平均の標準誤差は約 0.023 だった"
+          }
+        },
+        {
+          "id": "c4",
+          "statement": "GPT-4.1-mini（openai/gpt-4.1-mini、2025-04-14 スナップショット）で SciGym-small 137 件を最大 20 反復で解かせたときの平均 STE は、論文の 0.6007 を 0.05 より大きくは上回らない。",
+          "rationale": "同じスナップショットが使える mini モデルの行を担い、c3 と合わせて OpenAI 系の pro / mini の関係が論文どおりかを読めるようにする。",
+          "verifier": {
+            "kind": "seyval"
+          },
+          "designs": [
+            {
+              "id": "d4",
+              "summary": "d1 と同じ設定で、モデルを openai/gpt-4.1-mini に替える。",
+              "runs": [
+                {
+                  "run_id": "gpt-4.1-mini",
+                  "description": "openai/gpt-4.1-mini で SciGym-small 137 件を 20 反復で実行",
+                  "params": {
+                    "mode": "full"
+                  },
+                  "cites_passages": [
+                    "s1.p1"
+                  ]
+                }
+              ],
+              "cites_passages": [
+                "s1.p3",
+                "s1.p4",
+                "s2.p1",
+                "s3.p1"
+              ]
+            }
+          ],
+          "cites_passages": [
+            "s1.p5",
+            "s1.p10",
+            "s1.p3",
+            "s1.p2",
+            "s1.p6"
+          ],
+          "criterion": {
+            "metric": "trajectory_smape",
+            "subject": "gpt-4.1-mini",
+            "reference": 0.6007,
+            "op": "<=",
+            "margin": 0.05,
+            "reference_passage": "s1.p5"
+          },
+          "prediction": {
+            "low": -0.05,
+            "high": 0.05,
+            "basis": "論文 Table 1 の 1 回実行の平均値。前回の再現での差は +0.001 で、137 件平均の標準誤差は約 0.024 だった"
+          }
+        }
+      ],
+      "tables": [
+        {
+          "key": "table1",
+          "caption": "SciGym-small 137 件における平均 STE（低いほど良い）と RMS（Reaction Matching Score、高いほど良い）。P / R / F1 は適合率 / 再現率 / F1、添字 m は modifier の一致まで要求する厄格版。すべて airas-eval の scigym_small（SciGym 公式 Evaluator）の出力。論文 Table 1 の Gemini / OpenAI の 4 行に対応する。",
+          "columns": [
+            {
+              "header": "STE $\\downarrow$",
+              "ref_path": "trajectory_smape",
+              "round": 4
+            },
+            {
+              "header": "P$_{m}$",
+              "ref_path": "reaction_precision_with_modifiers",
+              "round": 3
+            },
+            {
+              "header": "R$_{m}$",
+              "ref_path": "reaction_recall_with_modifiers",
+              "round": 3
+            },
+            {
+              "header": "F1$_{m}$",
+              "ref_path": "reaction_f1_with_modifiers",
+              "round": 3
+            },
+            {
+              "header": "P",
+              "ref_path": "reaction_precision",
+              "round": 3
+            },
+            {
+              "header": "R",
+              "ref_path": "reaction_recall",
+              "round": 3
+            },
+            {
+              "header": "F1",
+              "ref_path": "reaction_f1",
+              "round": 3
+            }
+          ],
+          "rows": [
+            {
+              "run_id": "gemini-2.5-flash",
+              "label": "Gemini-2.5-Flash"
+            },
+            {
+              "run_id": "gpt-4.1-mini",
+              "label": "GPT-4.1-mini"
+            },
+            {
+              "run_id": "gemini-2.5-pro",
+              "label": "Gemini-2.5-Pro"
+            },
+            {
+              "run_id": "gpt-4.1",
+              "label": "GPT-4.1"
+            }
+          ]
+        },
+        {
+          "key": "topology",
+          "caption": "NTS（Network Topology Score、高いほど良い）。種と種の相互作用（無向エッジ、同じ組は 1 回）の適合率 / 再現率 / F1 と、エッジ型別（反応物-生成物、反応物-modifier、modifier-生成物）の F1。型別の値は真のモデルにその型のエッジがあるインスタンスだけの平均。すべて airas-eval の scigym_small（SciGym 公式 Evaluator）の出力。",
+          "columns": [
+            {
+              "header": "P",
+              "ref_path": "topology_precision",
+              "round": 3
+            },
+            {
+              "header": "R",
+              "ref_path": "topology_recall",
+              "round": 3
+            },
+            {
+              "header": "F1",
+              "ref_path": "topology_f1",
+              "round": 3
+            },
+            {
+              "header": "F1 r$\\to$p",
+              "ref_path": "topology_f1_reactant_product",
+              "round": 3
+            },
+            {
+              "header": "F1 r$\\to$m",
+              "ref_path": "topology_f1_reactant_modifier",
+              "round": 3
+            },
+            {
+              "header": "F1 m$\\to$p",
+              "ref_path": "topology_f1_modifier_product",
+              "round": 3
+            }
+          ],
+          "rows": [
+            {
+              "run_id": "gemini-2.5-flash",
+              "label": "Gemini-2.5-Flash"
+            },
+            {
+              "run_id": "gpt-4.1-mini",
+              "label": "GPT-4.1-mini"
+            },
+            {
+              "run_id": "gemini-2.5-pro",
+              "label": "Gemini-2.5-Pro"
+            },
+            {
+              "run_id": "gpt-4.1",
+              "label": "GPT-4.1"
+            }
+          ]
+        },
+        {
+          "key": "runs",
+          "caption": "各 run の評価件数、有効な SBML が提出された件数、トークン消費。Gemini の出力トークンには思考トークンを含む。",
+          "columns": [
+            {
+              "header": "n\\_instances",
+              "ref_path": "n_instances",
+              "round": 0
+            },
+            {
+              "header": "n\\_valid\\_submissions",
+              "ref_path": "n_valid_submissions",
+              "round": 0
+            },
+            {
+              "header": "入力トークン",
+              "ref_path": "input_tokens",
+              "round": 0
+            },
+            {
+              "header": "出力トークン",
+              "ref_path": "output_tokens",
+              "round": 0
+            }
+          ],
+          "rows": [
+            {
+              "run_id": "gemini-2.5-pro",
+              "label": "Gemini-2.5-Pro"
+            },
+            {
+              "run_id": "gemini-2.5-flash",
+              "label": "Gemini-2.5-Flash"
+            },
+            {
+              "run_id": "gpt-4.1",
+              "label": "GPT-4.1"
+            },
+            {
+              "run_id": "gpt-4.1-mini",
+              "label": "GPT-4.1-mini"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "ギャップ: SciGym 論文（s1）は 6 モデルを各 1 回走らせた 137 件平均を Table 1 として報告しているが、実行間の分散も、別環境・別時点での再現性も示していない。Gemini の 2 モデルは提供終了したプレビュー版で評価されている（s1.p1）。公開コード（s2）の Controller をそのまま使って、現在入手できる同名モデルで同じ数値が戻るかは示されていない。Claude の 2 モデルは利用する Vercel AI Gateway に無いため対象外。",
+        "この研究は auto-res2/scigym-table1-reproduction（2026-09-24/25）のやり直しである。前回は指標を実験コードが集計していたが、今回は airas-eval 0.11.1 の scigym_small パック（s3：SciGym 公式 Evaluator をコミット 88a7b93 で固定、137 件のデータを sha256 で固定、STE / RMS / NTS を返す）が生の提出物から計算する。実験コードはインスタンスごとに公式 3 ファイルと提出 SBML を eval_inputs/scigym_small.json に書くだけで、metrics.json は airas-eval のレポート（metrics と inputs_summary）に、実験側が数えたトークン数（input_tokens、output_tokens）を添えたもの。前回の Gemini-2.5-Pro はゲートウェイの予算超過で 25 件が失敗したまま確定したため、今回は HTTP 402 を検知した時点で run を失敗として止める（部分的な結果は取り込まない）。",
+        "判定基準と予測区間の根拠: 各 claim は (平均 STE − 論文値) ≤ 0.05 を反証線とする。0.05 は Table 1 の隣り合うモデル間の最小差（Gemini-2.5-Pro 0.3212 と Claude-3.7-Sonnet 0.3615 の 0.04）とほぼ同じで、これより大きく外れると Table 1 の順位付けの粒度で再現に失敗したことになる。前回の実測では 1 件の STE の標準偏差は 0.27〜0.33、137 件平均の標準誤差は 0.023〜0.028 で、2 つの 1 回実行の差の標準誤差は約 0.035 となる。予測区間は ±0.05。基準は片側（悪化方向）なので、現行版が論文より良い結果を出しても claim は成立する。",
+        "RMS（modifier あり / なし）の適合率・再現率・F1 は同じ実行から table1 として報告し、各モデルの F1 が論文値 ±0.06 に入ることを予測する（前回の差は −0.054〜+0.047）が、1 claim に 1 基準しか置けないため判定には用いない。NTS（s1.p11）は論文が Table 1 に載せていないため比較値が無く、topology 表として報告するのみで予測も置かない。論文の順序関係（pro が mini を上回る、s1.p6; Gemini-Pro が最良、s1.p7）は前回と同様に表から読み取って報告する。",
+        "計算資源: 実行は Seyval の BYO 計算資源 RIKYU（Slurm、GB200 ノード、aarch64、144 CPU）で行う。GPU は使わないが資源単位が GPU のため 1 GPU を要求する。LLM は Vercel AI Gateway（OpenAI 互換）経由。データは RIKYU 上の /data1/rkp00041/scigym_improvement/data/scigym_sbml/small（Hugging Face h4duan/scigym-sbml の small split を公式 download.py で展開したもの、137 件）を読み取り専用で参照し、airas-eval の manifest との sha256 照合で同一性を確かめる。",
+        "論文設定からの逸脱（事前に宣言）: (1) Gemini-2.5-Pro / Flash は GA 版。(2) aarch64 のため libroadrunner 2.8.0 → 2.7.0、antimony → 2.14.0、rrplugins / phrasedml / python-libnuml / python-libcombine は除外。(3) max_iterations は論文どおり 20（公開 config の既定 5、s2.p2）。eval_debug_rounds は論文本文の 3（s1.p4）に合わせる（公開 config の既定は 5、s2.p3）。temperature は公開 config の 1.0（s2.p1）。(4) 応答の max_tokens は 32768（公式 GPT エージェントの既定 8192 では thinking を出すモデルの本文が空になり得る）。(5) 137 件は 1 件 1 プロセスで並列に実行し、1 試行 90 分の強制タイムアウトを設ける（前回、LLM のコードが硬い ODE で C ライブラリ内に留まり公式の 3 分制限が効かなかった）。API エラーで終わらなかった件は最大 3 試行まで最初からやり直し、3 試行とも終わらなければ提出無し（submitted_sbml 無し）として渡し、パックが公式規約どおり不完全 SBML で採点する。ただし HTTP 402（予算超過）は即時に run を失敗させる。",
+        "run と claim の対応: gemini-2.5-pro → c1、gemini-2.5-flash → c2、gpt-4.1 → c3、gpt-4.1-mini → c4。段階: sanity は 1 件（BIOMD0000000027）を max_iterations=2 で、pilot は sorted した 137 件から 14 件おきに選んだ 10 件を 20 反復で回す。claim の判定は mode=full の結果だけで行い、sanity / pilot の結果は記録に取り込まない。"
+      ]
+    }
+  ]
+}
